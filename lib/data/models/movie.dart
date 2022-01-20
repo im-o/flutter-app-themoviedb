@@ -15,20 +15,21 @@ class Movie {
   int? voteCount;
 
   Movie({
-      this.adult,
-      this.backdropPath,
-      this.genreIds, 
-      this.id, 
-      this.originalLanguage, 
-      this.originalTitle, 
-      this.overview, 
-      this.popularity, 
-      this.posterPath, 
-      this.releaseDate, 
-      this.title, 
-      this.video, 
-      this.voteAverage, 
-      this.voteCount,});
+    this.adult,
+    this.backdropPath,
+    this.genreIds,
+    this.id,
+    this.originalLanguage,
+    this.originalTitle,
+    this.overview,
+    this.popularity,
+    this.posterPath,
+    this.releaseDate,
+    this.title,
+    this.video,
+    this.voteAverage,
+    this.voteCount,
+  });
 
   Movie.fromJson(Map<String, dynamic> json) {
     adult = json['adult'];
@@ -65,5 +66,4 @@ class Movie {
     map['vote_count'] = voteCount;
     return map;
   }
-
 }

@@ -38,8 +38,7 @@ class AppInterceptors extends Interceptor {
   }
 
   @override
-  void onResponse(
-      Response response, ResponseInterceptorHandler handler) async {
+  void onResponse(Response response, ResponseInterceptorHandler handler) async {
     return handler.next(response);
   }
 }
