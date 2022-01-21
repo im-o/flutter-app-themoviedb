@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:themoviedb/cubit/movies_cubit.dart';
 import 'package:themoviedb/data/repositories/movie_repository.dart';
-import 'package:themoviedb/presentation/home_page.dart';
+import 'package:themoviedb/presentation/home/home_page.dart';
 
 class App extends StatelessWidget {
   final MovieRepository movieRepository;
