@@ -9,17 +9,17 @@ class MovieImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Hero(
-      tag: movie.id.toString(),
-      child: movie.posterPath == null
-          ? Icon(
-              Icons.movie,
-              size: 48,
-            )
-          : Image.network(
-              imagePath + movie.posterPath!,
-              fit: BoxFit.fitWidth,
-            ),
+    return Stack(
+      children: [
+        Container(
+          child: movie.posterPath == null
+              ? Icon(Icons.movie)
+              : Image.network(
+                  imagePath + movie.posterPath!,
+                  fit: BoxFit.fitWidth,
+                ),
+        ),
+      ],
     );
   }
 }

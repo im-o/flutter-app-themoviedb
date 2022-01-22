@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:themoviedb/cubit/movies_cubit.dart';
 import 'package:themoviedb/data/models/movie.dart';
 import 'package:themoviedb/presentation/home/movie_list_item.dart';
@@ -29,24 +30,21 @@ class _HomePageState extends State<HomePage> {
       builder: (context, state) {
         if (state is MoviesLoading) return CircularProgressIndicator();
         if (state is MoviesLoaded) {
-          // final movies = (state).movies;
-          return GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisSpacing: 0,
-              crossAxisSpacing: 0,
-              childAspectRatio: 2.0 / 3.0,
+          final movies = (state).movies;
+          return SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(3.0),
+              child: StaggeredGrid.count(
+                crossAxisCount: 3,
+                mainAxisSpacing: 0,
+                crossAxisSpacing: 0,
+                children:
+                    movies!.map((movie) => _movie(movie, context)).toList(),
+              ),
             ),
-            itemBuilder: (context, index) {
-              final movie = state.movies?[index];
-              return _movie(movie, context);
-            },
-            itemCount: (state).movies?.length,
           );
         }
-        return Container(
-          child: Text("Data is empty!"),
-        );
+        return Container(child: Text("Data is empty!"));
       },
     );
   }

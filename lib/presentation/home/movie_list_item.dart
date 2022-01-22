@@ -14,14 +14,19 @@ class MovieListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      child: InkWell(
+    return InkWell(
+      child: Card(
+        elevation: 3,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        semanticContainer: true,
+        clipBehavior: Clip.antiAliasWithSaveLayer,
         child: MovieImage(movie: movie),
-        onTap: () {
-          onTapFunction();
-        },
       ),
+      onTap: () {
+        onTapFunction();
+      },
     );
   }
 }
