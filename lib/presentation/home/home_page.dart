@@ -29,11 +29,19 @@ class _HomePageState extends State<HomePage> {
       builder: (context, state) {
         if (state is MoviesLoading) return CircularProgressIndicator();
         if (state is MoviesLoaded) {
-          final movies = (state).movies;
-          return SingleChildScrollView(
-            child: Column(
-              children: movies!.map((movie) => _movie(movie, context)).toList(),
+          // final movies = (state).movies;
+          return GridView.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 0,
+              crossAxisSpacing: 0,
+              childAspectRatio: 2.0 / 3.0,
             ),
+            itemBuilder: (context, index) {
+              final movie = state.movies?[index];
+              return _movie(movie, context);
+            },
+            itemCount: (state).movies?.length,
           );
         }
         return Container(
