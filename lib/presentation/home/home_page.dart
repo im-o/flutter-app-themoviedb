@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:themoviedb/cubit/movies_cubit.dart';
 import 'package:themoviedb/data/models/movie.dart';
 import 'package:themoviedb/presentation/home/movie_list_item.dart';
@@ -15,37 +16,49 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  MovieList _movieList = MovieList();
+
   @override
   Widget build(BuildContext context) {
     BlocProvider.of<MoviesCubit>(context).fetchMovies();
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(title: Text("TheMovieDB")),
-      body: Center(child: _homePageBody()),
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          _homePageBody(),
+          _floatingSearchBar(),
+        ],
+      ),
     );
   }
 
   Widget _homePageBody() {
-    return BlocConsumer<MoviesCubit, MoviesState>(
-      listener: (context, state) {},
-      builder: (context, state) {
-        if (state is MoviesLoading) return CircularProgressIndicator();
-        if (state is MoviesLoaded) {
-          final movies = (state).movies;
-          return SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(3.0),
-              child: StaggeredGrid.count(
-                crossAxisCount: 3,
-                mainAxisSpacing: 0,
-                crossAxisSpacing: 0,
-                children:
-                    movies!.map((movie) => _movie(movie, context)).toList(),
+    return Center(
+      child: BlocConsumer<MoviesCubit, MoviesState>(
+        listener: (context, state) {},
+        builder: (context, state) {
+          if (state is MoviesLoading) return CircularProgressIndicator();
+          if (state is MoviesLoaded) {
+            final movies = (state).movies;
+            _movieList.incrementMovies(movies!.toList());
+            return SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(3.0),
+                child: StaggeredGrid.count(
+                  crossAxisCount: 3,
+                  mainAxisSpacing: 0,
+                  crossAxisSpacing: 0,
+                  children:
+                      movies.map((movie) => _movie(movie, context)).toList(),
+                ),
               ),
-            ),
-          );
-        }
-        return Container(child: Text("Data is empty!"));
-      },
+            );
+          }
+          return Container(child: Text("Data is empty!"));
+        },
+      ),
     );
   }
 
@@ -56,5 +69,93 @@ class _HomePageState extends State<HomePage> {
         log("MOVIES : ${movie.title}");
       },
     );
+  }
+
+  Widget _floatingSearchBar() {
+    final isPortrait =
+        MediaQuery.of(context).orientation == Orientation.portrait;
+
+    return FloatingSearchBar(
+      hint: 'Search...',
+      scrollPadding: const EdgeInsets.only(top: 16, bottom: 56),
+      transitionDuration: const Duration(milliseconds: 800),
+      transitionCurve: Curves.easeInOut,
+      physics: const BouncingScrollPhysics(),
+      axisAlignment: isPortrait ? 0.0 : -1.0,
+      openAxisAlignment: 0.0,
+      width: isPortrait ? 600 : MediaQuery.of(context).size.width,
+      debounceDelay: const Duration(milliseconds: 500),
+      onQueryChanged: (query) {
+        if (query.isNotEmpty)
+          BlocProvider.of<MoviesCubit>(context).searchMovies(query);
+        else
+          BlocProvider.of<MoviesCubit>(context).fetchMovies();
+      },
+      clearQueryOnClose: false,
+      transition: CircularFloatingSearchBarTransition(),
+      actions: [
+        FloatingSearchBarAction(
+          showIfOpened: false,
+          child: CircularButton(
+            icon: const Icon(Icons.movie),
+            onPressed: () {},
+          ),
+        ),
+        FloatingSearchBarAction.searchToClear(
+          showIfClosed: false,
+        ),
+      ],
+      builder: (context, transition) {
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: Material(
+            color: Colors.black,
+            elevation: 4.0,
+            child: Container(
+              color: Colors.black,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: _movieList.getMovies
+                      .map((movie) => _movieText(movie, context))
+                      .toList(),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _movieText(Movie movie, BuildContext context) {
+    return ListTile(
+      title: Text(movie.title.toString()),
+    );
+  }
+}
+
+class MovieList {
+  static final MovieList _instance = MovieList._internal();
+
+  factory MovieList() => _instance;
+
+  MovieList._internal() {
+    _movies = [];
+  }
+
+  List<Movie> _movies = [];
+
+  List<Movie> get getMovies {
+    return _movies;
+  }
+
+  set setMovies(List<Movie> values) {
+    _movies = values;
+  }
+
+  void incrementMovies(List<Movie> values) {
+    log("TEST : ${values.length}");
+    _movies = values;
   }
 }
