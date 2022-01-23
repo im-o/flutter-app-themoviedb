@@ -1,11 +1,10 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:themoviedb/cubit/movies_cubit.dart';
 import 'package:themoviedb/data/models/movie.dart';
+import 'package:themoviedb/presentation/detail_movie/movie_detail_page.dart';
 import 'package:themoviedb/presentation/home/movie_list_item.dart';
 
 class HomePage extends StatefulWidget {
@@ -66,7 +65,9 @@ class _HomePageState extends State<HomePage> {
     return MovieListItem(
       movie: movie,
       onTapFunction: () {
-        log("MOVIES : ${movie.title}");
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => MovieDetailPage(movie: movie),
+        ));
       },
     );
   }
