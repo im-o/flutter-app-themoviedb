@@ -23,4 +23,17 @@ class MovieProviders {
       return [];
     }
   }
+
+  Future<List<Movie>> searchMovies(String query) async {
+    try {
+      Response response = await _client.dio.get(
+        "search/movie",
+        queryParameters: {"api_key": API_KEY, "query": query},
+      );
+      return MovieResponse.fromJson(response.data).results!;
+    } on DioError catch (e) {
+      log("RVL_ERROR : ${e.message}");
+      return [];
+    }
+  }
 }
