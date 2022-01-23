@@ -6,7 +6,7 @@ abstract class MoviesState {}
 class MoviesInitial extends MoviesState {}
 
 class MoviesLoaded extends MoviesState {
-  final List<dynamic>? movies;
+  final List<Movie>? movies;
 
   MoviesLoaded({required this.movies});
 }
