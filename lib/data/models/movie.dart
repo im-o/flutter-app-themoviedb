@@ -11,7 +11,7 @@ class Movie {
   String? releaseDate;
   String? title;
   bool? video;
-  double? voteAverage;
+  // double? voteAverage;
   int? voteCount;
 
   Movie({
@@ -27,7 +27,7 @@ class Movie {
     this.releaseDate,
     this.title,
     this.video,
-    this.voteAverage,
+    // this.voteAverage,
     this.voteCount,
   });
 
@@ -44,7 +44,7 @@ class Movie {
     releaseDate = json['release_date'];
     title = json['title'];
     video = json['video'];
-    voteAverage = json['vote_average'];
+    // voteAverage = json['vote_average'];
     voteCount = json['vote_count'];
   }
 
@@ -62,7 +62,7 @@ class Movie {
     map['release_date'] = releaseDate;
     map['title'] = title;
     map['video'] = video;
-    map['vote_average'] = voteAverage;
+    // map['vote_average'] = voteAverage;
     map['vote_count'] = voteCount;
     return map;
   }
