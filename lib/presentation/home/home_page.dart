@@ -19,13 +19,15 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     BlocProvider.of<MoviesCubit>(context).fetchMovies();
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Column(
-        children: [
-          _searchCustom(),
-          Expanded(child: _homePageBody()),
-        ],
+    return SafeArea(
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: Column(
+          children: [
+            _searchCustom(),
+            Expanded(child: _homePageBody()),
+          ],
+        ),
       ),
     );
   }
