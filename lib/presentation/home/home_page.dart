@@ -43,20 +43,23 @@ class _HomePageState extends State<HomePage> {
             ),
           );
         final movies = (state).movies;
-        return movies!.length > 0
-            ? Padding(
-                padding: const EdgeInsets.all(5.0),
-                child: SingleChildScrollView(
-                  child: StaggeredGrid.count(
-                    crossAxisCount: 3,
-                    mainAxisSpacing: 0,
-                    crossAxisSpacing: 0,
-                    children:
-                        movies.map((movie) => _movie(movie, context)).toList(),
+        return LayoutBuilder(builder: (context, constraints) {
+          return movies!.length > 0
+              ? Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: SingleChildScrollView(
+                    child: StaggeredGrid.count(
+                      crossAxisCount: constraints.maxWidth > 900 ? 5 : 3,
+                      mainAxisSpacing: 0,
+                      crossAxisSpacing: 0,
+                      children: movies
+                          .map((movie) => _movie(movie, context))
+                          .toList(),
+                    ),
                   ),
-                ),
-              )
-            : Center(child: Container(child: Text("Data is empty!")));
+                )
+              : Center(child: Container(child: Text("Data is empty!")));
+        });
       },
     );
   }
